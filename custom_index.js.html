@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: custom/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: custom/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module: 历史项目定制通用函数
+ * @author: Yawei Wang 
+ * @date: 2019-06-03 11:00:26 
+ */
+import { Modal } from 'antd';
+const confirm = Modal.confirm;
+
+/**
+ * 获取uuid 方法
+ */
+export const getId = () => {
+  return window.location.pathname.match(/\d+/g)
+}
+
+/**
+ * 格式化 @内容
+ * @param val{String}@ 原数据
+ */
+export const decodeAtMsg = (text, isNofity) => {
+  if (!text) {
+    return ''
+  }
+  let msg = text
+  msg = msg.replace(/\n/g, '【【br】】')
+  msg = msg.replace(/\s/g, '&amp;ensp;')
+  // 解析 @ta
+  msg = msg.replace(/&amp;lt;/g, '&lt;')
+  msg = msg.replace(/&amp;gt;/g, '>')
+  if (isNofity) {
+    msg = msg.replace(/&lt;@([^|]+)\|([^>]+)>/g, '@$2')
+  } else {
+    msg = msg.replace(/&lt;@([^|]+)\|([^>]+)>/g, '【【span data-uuid="$1" class="atta"】】@$2【【/span】】 ')
+  }
+  msg = msg.replace(/【【/g, '&lt;')
+  msg = msg.replace(/】】/g, '>')
+  return msg
+}
+
+/**
+ * 转换后端传回的日期串
+ * @param {*} val 值
+ * @param {*} type 格式
+ * @param {*} isMillisecond 是否是毫秒
+ */
+export const getDate = (val, type, isMillisecond = true) => {
+  let time = new Date()
+  if (val) {
+    time = isMillisecond ? new Date(val * 1000) : new Date(val.toString().replace(/-/g, '/'))
+  }
+  let year = time.getFullYear()
+  let cmonth = time.getMonth() + 1
+  let month = cmonth &lt; 10 ? '0' + cmonth : cmonth
+  let date = time.getDate() &lt; 10 ? '0' + time.getDate() : time.getDate()
+  let hour = time.getHours()
+  hour = hour &lt; 10 ? '0' + hour : hour
+  let minutes = time.getMinutes()
+  minutes = minutes &lt; 10 ? '0' + minutes : minutes
+  let seconds = time.getSeconds()
+  seconds = seconds &lt; 10 ? '0' + seconds : seconds
+  let result = ''
+  switch (type) {
+    case 'y.m': // 2016.11
+      result = year + '.' + month
+      break
+    case 'ym': // 2016.11.23
+      result = year + '.' + month + '.' + date
+      break
+    case 'md': // 11.23
+      result = month + '.' + date
+      break
+    case 'hm': // 10:56
+      result = hour + ':' + minutes
+      break
+    case 'mdhm': // 11-23 10:56
+      result = month + '-' + date + ' ' + hour + ':' + minutes
+      break
+    case 'hms': // 10:56:09
+      result = hour + ':' + minutes + ':' + seconds
+      break
+    case 'm': // 06
+      result = minutes
+      break
+    case 'm-d': // 11-23
+      result = month + '-' + date
+      break
+    case 'ymhs': // 2016.11.23 10:56
+      result = year + '.' + month + '.' + date + ' ' + hour + ':' + minutes
+      break
+    case 'ymhss': // 2016.11.23 10:56:00
+      result = year + '.' + month + '.' + date + ' ' + hour + ':' + minutes + ':' + seconds
+      break
+    case 'ymdhms': // 20161123105600
+      result = year + '' + month + '' + date + '' + hour + '' + minutes + '' + seconds
+      break
+    case 'y-mhs': // 2016-11-23 10:56
+      result = year + '-' + month + '-' + date + ' ' + hour + ':' + minutes
+      break
+    case 'ymdhm': // 2016-11-23
+      result = year + '-' + month + '-' + date
+      break
+    case 'mdyr': // 11月23日
+      result = month + '月' + date + '日 '
+      break
+    case 'ymd': // 2013年11月23日
+      result = year + '年' + month + '月' + date + '日 '
+      break
+    case 'year': // 2016
+      result = year
+      break
+    case 'task':
+      let now = (new Date()).getTime()
+      let day = (new Date()).getDate()
+      let diff = now - time
+      result = year + '-' + month + '-' + date + ' ' + hour + ':' + minutes
+      if (diff &lt; 86400000) {
+        result = time.getDate() - day === 0 ? '今天 ' + hour + ':' + minutes : '昨天 ' + hour + ':' + minutes
+      } else if (diff &lt; 86400000 * 2) {
+        result = day - time.getDate() === 1 ? '昨天 ' + hour + ':' + minutes : result
+      }
+      break
+    default:
+      result = year + '-' + month
+  }
+  return result
+}
+
+/**
+ * 获取下标
+ */
+export const findIndex = (arr, key, val) => {
+  let idx = -1
+  if (Object.prototype.toString.call(arr) === '[object Array]') {
+    arr.forEach((item, i) => {
+      if (item[key] === val) {
+        idx = i
+      }
+    })
+  }
+  return idx
+}
+
+/**
+ * 获取当前日期字符串
+ */
+export const getNowDateStr = () => {
+  let now = new Date()
+  let getyear = now.getFullYear()
+  let getmonth = now.getMonth() + 1
+  let getdate = now.getDate()
+  if (getmonth &lt; 10) {
+    getmonth = '0' + getmonth.toString()
+  }
+  if (getdate &lt; 10) {
+    getdate = '0' + getdate.toString()
+  }
+  return getyear.toString() + '/' + getmonth.toString() + '/' + getdate
+}
+
+/**
+ * 添加事件
+ * @param {Object} obj 被添加事件的对象
+ * @param {String} xEvent  事件名称
+ * @param {Function} fn 事件执行函数
+ */
+export const addEvent = (obj, xEvent, fn) => {
+  if (obj.attachEvent) {
+    obj.attachEvent('on' + xEvent, fn)
+  } else {
+    obj.addEventListener(xEvent, fn, false)
+  }
+}
+
+// 移除事件
+export const removeEvent = (obj, xEvent, fn) => {
+  if (obj.detachEvent) {
+    obj.detachEvent('on' + xEvent, fn)
+  } else {
+    obj.removeEventListener(xEvent, fn, false)
+  }
+}
+
+/**
+ * 注销事件
+ * @param {*} obj
+ * @param {*} xEvent
+ */
+export const offEvent = (obj, xEvent) => {
+  obj.removeEventListener(xEvent, this)
+}
+
+/**
+ * 发布需求跳转前检查
+ */
+export const ckGoNewJob = (profile, history) => {
+  if (!profile || !profile.id) {
+    this.goLogin()
+  } else {
+    if (profile.role_type === 1) {
+      // 当前身份是个人身份
+      if (profile.com_verify === 3) {
+        // 进行过企业认证
+        Modal.warning({
+          title: '无法发布需求',
+          content: '您当前身份是精英，无法发布需求，如需发布，请切换成企业身份',
+          okText: '知道了',
+          iconType: 'info-circle',
+          okType: 'primary',
+          onOk() {},
+        });
+      } else {
+        // 没进行企业认证
+        confirm({
+          title: '无法发布需求',
+          content: '您当前身份是精英，无法发布需求，如需发布，请先进行企业认证',
+          okText: '马上开通',
+          iconType: 'info-circle',
+          okType: 'primary',
+          cancelText: '知道了',
+          onOk() {
+            if (history) {
+              history.push('/workbench/auth')
+            } else {
+              window.location.href = '/workbench/auth'
+            }
+          },
+          onCancel() {},
+        });
+      }
+    } else if (profile.role_type === 23 &amp;&amp; profile.com_verify !== 3) {
+      // 是企业身份，但没通过企业验证
+      confirm({
+        title: '无法发布需求',
+        content: '您还没有进行企业认证，暂时无法发布需求，是否开通？',
+        okText: '马上开通',
+        iconType: 'info-circle',
+        okType: 'primary',
+        cancelText: '知道了',
+        onOk() {
+          if (history) {
+            history.push('/workbench/auth')
+          } else {
+            window.location.href = '/workbench/auth'
+          }
+        },
+        onCancel() {},
+      });
+    } else {
+      window.scrollTo(0, 0)
+      history.push('/job/new')
+    }
+  }
+}
+
+/** 我要加入检查 */
+export const ckJoin = (profile, history) => {
+  if (!profile || !profile.id) {
+    this.goLogin()
+  } else {
+    let url = ''
+    // 个人服务商角色
+    if (profile.role_type === 0 || profile.role_type === 1) {
+      if (profile.person_verify === 3) {
+        // 已认证则跳转简历页面
+        url = '/workbench/person/resume'
+      } else {
+        // 未认证则跳转认证界面
+        url = '/workbench/auth'
+      }
+    } else if (profile.role_type === 2) {
+      // 企业服务方-机构
+      if (profile.com_verify === 3) {
+        // 已认证则跳转简历页面
+        url = 'workbench/demand/info'
+      } else {
+        // 未认证则跳转认证界面
+        url = '/workbench/auth'
+      }
+    } else {
+      // 认证成功跳转我的机构页面
+      if (profile.com_verify === 3) {
+        url = '/workbench/demand/info'
+      } else {
+        // 否则跳转认证页面
+        url = '/workbench/auth'
+      }
+    }
+    if (history) {
+      history.push(url)
+    } else {
+      window.location.href = url
+    }
+  }
+}
+
+/**
+ * 获取主站链接
+ */
+export const getHost = () => {
+  return window.location.href.indexOf('clouderwork') >= 0 ? 'https://www.clouderwork.com' : 'http://test.yunwoke.com'
+}
+
+/**
+ * 设置倒计时
+ * @param {String} time 目标时间
+ * @param {Boolean} before 是否之前
+ */
+export const downTime = (time, before) => {
+  const now = (new Date()).getTime()
+  time = (new Date(time.toString().replace(/-/ig, '/'))).getTime()
+  let oneDay = 24 * 1000 * 60 * 60
+  if (Math.abs(time - now) > oneDay) {
+    let diffDay = Math.floor(Math.abs(time - now) / oneDay)
+    if (before) {
+      if (Math.abs(time - now) > oneDay * 5) {
+        return this.getDate(time / 1000, 'ymd', true)
+      } else {
+        return `${diffDay}天前`
+      }
+    }
+    return '&lt;b>' + diffDay + '&lt;/b>天'
+  } else {
+    var h, m;
+    let leftTime = Math.abs(time - now);
+    if (leftTime >= 0) {
+      h = Math.floor(leftTime / 1000 / 60 / 60 % 24)
+      m = Math.floor(leftTime / 1000 / 60 % 60)
+    }
+    if (before) {
+      if (h &lt;= 0) {
+        if (m &lt; 1) {
+          return '刚刚'
+        }
+        return `${m}分钟前`
+      }
+      return `${h}小时前`
+    }
+    return `${h}小时${m}分`
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addEvent">addEvent</a></li><li><a href="global.html#AsyncProfileFn">AsyncProfileFn</a></li><li><a href="global.html#AsyncSso">AsyncSso</a></li><li><a href="global.html#ckGoNewJob">ckGoNewJob</a></li><li><a href="global.html#ckJoin">ckJoin</a></li><li><a href="global.html#debounce">debounce</a></li><li><a href="global.html#decodeAtMsg">decodeAtMsg</a></li><li><a href="global.html#decodeHtml">decodeHtml</a></li><li><a href="global.html#deepCopy">deepCopy</a></li><li><a href="global.html#deleteJson">deleteJson</a></li><li><a href="global.html#downTime">downTime</a></li><li><a href="global.html#encodeHtml">encodeHtml</a></li><li><a href="global.html#findIndex">findIndex</a></li><li><a href="global.html#getCharLen">getCharLen</a></li><li><a href="global.html#getDate">getDate</a></li><li><a href="global.html#getDiff">getDiff</a></li><li><a href="global.html#getHost">getHost</a></li><li><a href="global.html#getId">getId</a></li><li><a href="global.html#getJson">getJson</a></li><li><a href="global.html#getLoginUrl">getLoginUrl</a></li><li><a href="global.html#getMoney">getMoney</a></li><li><a href="global.html#getNowDateStr">getNowDateStr</a></li><li><a href="global.html#getQueryString">getQueryString</a></li><li><a href="global.html#getSize">getSize</a></li><li><a href="global.html#getUuid">getUuid</a></li><li><a href="global.html#goLogin">goLogin</a></li><li><a href="global.html#isEmail">isEmail</a></li><li><a href="global.html#isIdCard">isIdCard</a></li><li><a href="global.html#isPhoneNum">isPhoneNum</a></li><li><a href="global.html#isUrl">isUrl</a></li><li><a href="global.html#offEvent">offEvent</a></li><li><a href="global.html#postFile">postFile</a></li><li><a href="global.html#postFileProgresspostFileProgress">postFileProgresspostFileProgress</a></li><li><a href="global.html#postJson">postJson</a></li><li><a href="global.html#profileFn">profileFn</a></li><li><a href="global.html#putJson">putJson</a></li><li><a href="global.html#removeTag">removeTag</a></li><li><a href="global.html#ssoLogin">ssoLogin</a></li><li><a href="global.html#throttle">throttle</a></li><li><a href="global.html#withXsrf">withXsrf</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Mon Jun 03 2019 14:27:06 GMT+0800 (GMT+08:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
