@@ -33,7 +33,21 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-ajax.html">ajax</a></li><li><a href="module-cookie.html">cookie</a></li><li><a href="module-custom.html">custom</a></li><li><a href="module-html.html">html</a></li><li><a href="module-rule.html">rule</a></li><li><a href="module-user.html">user</a></li><li><a href="module-utils.html">utils</a></li>
+					<li><a href="module-ajax.html">ajax</a></li><li><a href="module-cookie.html">cookie</a></li><li><a href="module-custom.html">custom</a></li><li><a href="module-html.html">html</a></li><li><a href="module-range.html">range</a></li><li><a href="module-rule.html">rule</a></li><li><a href="module-user.html">user</a></li><li><a href="module-utils.html">utils</a></li><li><a href="module-window.html">window</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-window-Visibility.html">window~Visibility</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#download">download</a></li><li><a href="global.html#saveUrl">saveUrl</a></li><li><a href="global.html#saveUrlBlob">saveUrlBlob</a></li>
 				</ul>
 			</li>
 			
@@ -558,158 +572,6 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".getDiff"><span class="type-signature">&lt;static> </span>getDiff(start, end)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>计算时间差，以hh:mm:ss格式返回</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>start</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>开始时间</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>end</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>结束时间</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
     <h4 class="name" id=".getMoney"><span class="type-signature">&lt;static> </span>getMoney(val, isWan)</h4>
     
     
@@ -1142,84 +1004,6 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".getUuid"><span class="type-signature">&lt;static> </span>getUuid()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>获取uuid方法</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
     <h4 class="name" id=".throttle"><span class="type-signature">&lt;static> </span>throttle(fn, wait, mustRun)</h4>
     
     
@@ -1392,6 +1176,134 @@
     
 </dd>
 
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".urlToLink"><span class="type-signature">&lt;static> </span>urlToLink(str)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>将连接字符串转化为a标签</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>str</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
         </dl>
     
 
@@ -1446,7 +1358,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a>
 	
-		on 2019-06-04T09:56:19+08:00
+		on 2019-06-05T11:15:12+08:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
